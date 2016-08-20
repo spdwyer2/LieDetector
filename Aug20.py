@@ -162,7 +162,7 @@ print clf.score(tf_idf,df['rulings'])
 rulings_predictions2 = clf.predict(tf_idf)
 cm = confusion_matrix(df['rulings'],rulings_predictions2)
 print cm
-seaborn.heatmap(cm)
+print seaborn.heatmap(cm)
 
 
 
