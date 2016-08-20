@@ -134,10 +134,21 @@ from sklearn.feature_extraction.text import CountVectorizer
 count_vect = CountVectorizer()
 counts = count_vect.fit_transform(df['text'])
 
+#Creating tfidf scores for each comment
 from sklearn.feature_extraction.text import TfidfTransformer
 tf_transformer = TfidfTransformer(use_idf=True).fit(counts)
 tf_idf = tf_transformer.transform(counts)
 
+tf_idf.todense()
+
+from sklearn.naive_bayes import MultinomialNB
+clf = MultinomialNB().fit(tf_idf, df['rulings'])
+print clf.score(tf_idf,df['rulings'])
+
+from sklearn.metrics import confusion_matrix
+rulings_predictions = clf.predict(tf_idf)
+cm = confusion_matrix(rulings,rulings_predictions)
+print cm
 
 df.to_csv('scotttry6.csv')
 
