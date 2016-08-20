@@ -1,0 +1,2 @@
+# LieDetector
+Trump NLP Project
