@@ -127,8 +127,7 @@ def stem_words(content):
 df['text'] = df['text'].apply(stem_words)
 
 #Storing the cleaned quote text as a variable
-
-
+df['text']= df['text'].fillna("")
 
 #Training a classifier using CountVectorizer
 from sklearn.feature_extraction.text import CountVectorizer
