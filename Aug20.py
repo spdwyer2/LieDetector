@@ -134,21 +134,39 @@ from sklearn.feature_extraction.text import CountVectorizer
 count_vect = CountVectorizer()
 counts = count_vect.fit_transform(df['text'])
 
-#Creating tfidf scores for each comment
+#Creating tf-idf scores for each comment
 from sklearn.feature_extraction.text import TfidfTransformer
 tf_transformer = TfidfTransformer(use_idf=True).fit(counts)
 tf_idf = tf_transformer.transform(counts)
 
+#Convert from sparse form to normal matrix
 tf_idf.todense()
 
+#See how well the tf-idf scores predict rulings
 from sklearn.naive_bayes import MultinomialNB
 clf = MultinomialNB().fit(tf_idf, df['rulings'])
 print clf.score(tf_idf,df['rulings'])
 
+#Check out the confusion matrix
 from sklearn.metrics import confusion_matrix
 rulings_predictions = clf.predict(tf_idf)
 cm = confusion_matrix(rulings,rulings_predictions)
 print cm
+
+
+from sklearn.svm import SVC
+import seaborn
+clf = SVC(C=10,gamma=1)
+clf.fit(tf_idf, df['rulings'])
+print clf.score(tf_idf,df['rulings'])
+rulings_predictions2 = clf.predict(tf_idf)
+cm = confusion_matrix(df['rulings'],rulings_predictions2)
+print cm
+seaborn.heatmap(cm)
+
+
+
+
 
 df.to_csv('scotttry6.csv')
 
@@ -168,9 +186,10 @@ Count of commas!!!!! Normalize by sentences. Liars qualify sentences more.
 topic: first you have to wrap a count vectorizer (sklearn) what it does is transforms your text into a matrix where rows are statements and columns are the presence
 of certain words. From there you can pass this is on to LDA and that will look at coocurrences of certain words. Tell it how many topics you think there are. 
 
-pull quotes out into a separate column. Do an apply / split x.split("")
+Scott notes to self:
+Look at distribution of rulings and use clf class prior to weight the probability of any decision
+Try 
 
-command remove duplicates 
 
 '''
 
